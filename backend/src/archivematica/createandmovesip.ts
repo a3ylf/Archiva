@@ -6,16 +6,16 @@ import * as os from 'os';
 import { config } from '../config';
 
 // CONFIGURAÇÕES
-const ARCHIVEMATICA_URL = config.dashboardUrl; // endpoint da pipeline
-const API_KEY = config.dashboardApiKey; //api do dashboard
-const LOCATION_UUID = config.locationUuid; // pegue na interface da pipeline
+const ARCHIVEMATICA_URL = config.dashboardUrl;
+const API_KEY = config.dashboardApiKey;
+const LOCATION_UUID = config.locationUuid;
 
-export async function createSIP(inputFiles: string[], metadata: any, sipName: string): Promise<string> {
+export async function createSIP(inputFiles: string[], sipName: string): Promise<string> {
     const homeDir = os.homedir();
 
     const outputDir = path.join(
         homeDir,
-        `archivematica/hack/submodules/archivematica-sampledata/archiva/${sipName}`
+        `${config.output_dir}${sipName}`
     );
     const filesDir = path.join(outputDir, 'files');
 
@@ -26,8 +26,6 @@ export async function createSIP(inputFiles: string[], metadata: any, sipName: st
         await fs.copy(file, path.join(filesDir, fileName));
     }
 
-    const metadataPath = path.join(outputDir, 'metadata.json');
-    await fs.writeJSON(metadataPath, metadata, { spaces: 2 });
 
     console.log(`✅ SIP criado em: ${outputDir}`);
     return outputDir;
@@ -50,7 +48,6 @@ export async function startTransfer(sipName: string) {
     });
 
     try {
-        // Enviando a requisição para o servidor
         const response = await axios.post(
             `${ARCHIVEMATICA_URL}/api/transfer/start_transfer/`,
             requestBody,
@@ -61,7 +58,19 @@ export async function startTransfer(sipName: string) {
                 }
             }
         );
+
         console.log('Transferência iniciada com sucesso:', response.data);
+
+        const path: string = response.data.path;
+        const match = path.match(/transfer\d+-([a-f0-9-]+)/);
+
+        if (match && match[1]) {
+            const transferUuid = match[1];
+            console.log('🧩 UUID da transferência:', transferUuid);
+            // Você pode agora usar `transferUuid` como quiser
+        } else {
+            console.warn('⚠️ UUID não encontrado na resposta.');
+        }
     } catch (error: any) {
         if (error.response) {
             console.error('Erro com resposta HTML:');
@@ -74,17 +83,15 @@ export async function startTransfer(sipName: string) {
 }
 
 //exemplo de uso
-const inputFiles = ['./test1.pdf', './test2.txt'];
-const metadata = {
-    title: 'Documentos Importantes',
-    description: 'Pacote de documentos para preservação digital.',
-    dateCreated: new Date().toISOString(),
-    author: 'John Doe'
-};
-const sipName = 'transfer123';
+
+const inputFiles = [
+    path.resolve(__dirname, 'testdata/test1.pdf'),
+    path.resolve(__dirname, 'testdata/test2.wav')
+];
+const sipName = 'transfer789';
 
 async function process() {
-    await createSIP(inputFiles, metadata, sipName);
+    await createSIP(inputFiles, sipName);
     await startTransfer(sipName);
 }
 
