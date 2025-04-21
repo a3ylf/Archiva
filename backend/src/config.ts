@@ -1,4 +1,5 @@
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 const requiredEnv = [
@@ -19,7 +20,7 @@ for (const key of requiredEnv) {
 }
 
 export const config = {
-    dashboardUrl: process.env.DASHBOARD_URL!,
+    dashboardUrl: process.env.DASHBOARD_URL ?? 'http://localhost:62080',
     dashboardUsername: process.env.DASHBOARD_USERNAME!,
     dashboardApiKey: process.env.DASHBOARD_API_KEY!,
 
@@ -28,5 +29,7 @@ export const config = {
     storagePassword: process.env.STORAGE_SERVICE_PASSWORD!,
 
     locationUuid: process.env.LOCATION_UUID!,
+    output_dir: process.env.OUTPUT_DIR!,
 };
 
+console.log(config.dashboardUrl)
