@@ -10,7 +10,8 @@ const requiredEnv = [
     'STORAGE_SERVICE_USERNAME',
     'STORAGE_SERVICE_PASSWORD',
     'LOCATION_UUID',
-    'OUTPUT_DIR'
+    'OUTPUT_DIR',
+    'JWT'
 ] as const;
 
 for (const key of requiredEnv) {
@@ -30,6 +31,7 @@ export const config = {
 
     locationUuid: process.env.LOCATION_UUID!,
     output_dir: process.env.OUTPUT_DIR!,
+    jwt_token: process.env.JWT
 };
 
 console.log(config.dashboardUrl)
