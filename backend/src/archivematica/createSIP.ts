@@ -3,7 +3,6 @@ import * as os from 'os';
 import fs from 'fs-extra';
 import { config } from '../config';
 
-//TODO PUT OUTPUTDIR IN .ENV
 export async function createSIP(inputFiles: string[], metadata: any, sipName: string): Promise<string> {
     const homeDir = os.homedir();
     const outputDir = join(homeDir, `archivematica/hack/submodules/archivematica-sampledata/archiva/${sipName}`);

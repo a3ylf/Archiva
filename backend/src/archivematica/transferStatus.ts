@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { config } from '../config'; // ajuste conforme sua estrutura
-
-// Substitua pelo UUID real da sua transferência
+import { config } from '../config';
 const transferUUID = '81f0aecc-1065-42ab-905c-030684ca41e4'
 const transferUUID2 = '0a6d7445-dbf7-4cd6-a358-a6efbb47f834'
 
