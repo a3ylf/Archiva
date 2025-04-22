@@ -15,6 +15,10 @@ export class AuthController {
     async signup(@Body() signupDto: SignupDto) {
         return this.authService.signup(signupDto);
     }
+    @Get('users')
+    async users() {
+        return this.authService.getAllUsers();
+    }
 }
 @Controller('user')
 export class UserController {

@@ -54,7 +54,10 @@ export class AuthService {
 
         const payload = { sub: user.id, username: user.username };
          const token = jwt.sign(payload, config.jwt_token || '1234', { expiresIn: '1h' }); 
-        return { access_token: token };
+        return { id: user.id,access_token: token };
     }
+    async getAllUsers() {
+    return this.prisma.user.findMany();
+  }
 }
 

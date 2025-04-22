@@ -4,7 +4,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { config } from '../config'; 
 
-const fileUUID = '0d82faa7-f6bd-4021-8f33-80f33e6b0a42';
 
 async function downloadFile(uuid: string) {
     try {
@@ -82,5 +81,4 @@ function unzipFile(filePath: string,fileName: string) {
     });
 }
 
-downloadFile(fileUUID);
 

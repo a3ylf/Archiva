@@ -1,7 +1,9 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import axios from 'axios';
-import qs from 'qs';
+import * as qs from 'qs';
+console.log('qs test:', typeof qs.stringify); // deve ser "function"
+
 import * as os from 'os';
 import { config } from '../config';
 
@@ -46,6 +48,7 @@ export async function startTransfer(sipName: string) {
         "paths[]": encoded
 
     });
+    console.log(requestBody)
 
     try {
         const response = await axios.post(
@@ -67,6 +70,7 @@ export async function startTransfer(sipName: string) {
         if (match && match[1]) {
             const transferUuid = match[1];
             console.log('🧩 UUID da transferência:', transferUuid);
+            return transferUuid
             // Você pode agora usar `transferUuid` como quiser
         } else {
             console.warn('⚠️ UUID não encontrado na resposta.');
@@ -82,18 +86,17 @@ export async function startTransfer(sipName: string) {
     }
 }
 
-//exemplo de uso
 
-const inputFiles = [
-    path.resolve(__dirname, 'testdata/test1.pdf'),
-    path.resolve(__dirname, 'testdata/test2.wav')
-];
-const sipName = 'transfer789';
-
-async function process() {
-    await createSIP(inputFiles, sipName);
-    await startTransfer(sipName);
-}
-
-process().catch(console.error);
+// const inputFiles = [
+//     path.resolve(__dirname, 'testdata/test1.pdf'),
+//     path.resolve(__dirname, 'testdata/test2.wav')
+// ];
+// const sipName = 'transfer789';
+//
+// async function process() {
+//     await createSIP(inputFiles, sipName);
+//     await startTransfer(sipName);
+// }
+//
+// process().catch(console.error);
 
