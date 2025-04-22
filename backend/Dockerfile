@@ -6,5 +6,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-CMD npx prisma db push & npm run start:dev
+
+CMD ["sh", "-c", "npm run db:deploy && npm run start:dev"]
+
 

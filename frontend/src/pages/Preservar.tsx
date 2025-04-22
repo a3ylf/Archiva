@@ -48,9 +48,9 @@ const Preservar = ({ onClose }: PreserveModalProps) => {
     formData.append('category', metadados.category);
     formData.append('date', metadados.date);
     formData.append('size', metadados.size);
-
+    const API = 'http://localhost:3000'; 
     try {
-      const response = await fetch('/preserve', {
+      const response = await fetch(`${API}/preserve`, {
         method: 'POST',
         body: formData,
       });
