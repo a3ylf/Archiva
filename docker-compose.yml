@@ -13,6 +13,11 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
 
   backend:
     build: ./backend
@@ -21,13 +26,13 @@ services:
     ports:
       - '3000:3000'
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       NODE_ENV: development
       CHOKIDAR_USEPOLLING: "true"
     volumes:
       - /app/node_modules
-    command: npm run start:dev
     develop:
       watch:
         - action: sync
@@ -45,7 +50,7 @@ services:
     build: ./frontend
     container_name: frontend
     ports:
-        - '5173:5173'
+      - '5173:5173'
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
@@ -60,4 +65,5 @@ services:
       - ./frontend/.env
 
 volumes:
-    postgres_data:
+  postgres_data:
+
